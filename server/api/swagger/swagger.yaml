@@ -1,0 +1,71 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Gauge Swagger Demo Server
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+
+paths:
+  /messages:
+    x-swagger-router-controller: messages
+    get:
+      description: Get a list of messages sent so far
+      produces:
+      - application/json
+      responses:
+        '200':
+          $ref: '#/responses/MessageList'
+    post:
+      description: Write a new message
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - name: msg
+          in: body
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/responses/Success'
+    delete:
+      description: Clear existing messages
+      produces:
+      - application/json
+      responses:
+        '200':
+          $ref: '#/responses/Success'
+
+definitions:
+  Msg:
+    title: Message
+    description: A single message
+    type: string
+
+responses:
+  Success:
+    description: Response sent on a success.
+    schema:
+      type: string
+  MessageList:
+    description: Response containing list of messages.
+    schema:
+      description: Message list
+      type: array
+      items:
+        $ref: '#/definitions/Msg'
